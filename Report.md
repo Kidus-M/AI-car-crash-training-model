@@ -39,7 +39,7 @@ Road traffic accidents are a major public health concern, particularly in develo
 The dataset contains road crash records from Addis Ababa, Ethiopia, with the following characteristics:
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Total Records | 60,004 |
 | Total Features | 54 |
 | Target Variable | Accident Type |
@@ -74,7 +74,7 @@ The dataset contains road crash records from Addis Ababa, Ethiopia, with the fol
 The target variable "Accident Type" shows significant class imbalance:
 
 | Class | Count | Percentage |
-|-------|-------|------------|
+| --- | --- | --- |
 | Minor | 37,990 | 63.4% |
 | PDO (Property Damage Only) | 15,767 | 26.3% |
 | Serious | 4,445 | 7.4% |
@@ -92,11 +92,8 @@ The target variable "Accident Type" shows significant class imbalance:
 Several strategies were employed to handle missing values:
 
 1. **Columns with 100% missing values** (Region, Zone, Exiting/entering, Contributory Action, Driving License) were removed entirely.
-
 2. **Columns with >70% missing values** including victim movement details were dropped.
-
 3. **Numerical features** were imputed with median values to reduce skewness impact.
-
 4. **Categorical features** were imputed with mode (most frequent value) or marked as "Unknown".
 
 #### 3.1.2 Feature Encoding
@@ -132,21 +129,16 @@ Dense(4, Softmax) → [Fatal, Minor, PDO, Serious]
 #### Architecture Justification:
 
 1. **Three Hidden Layers:** Provides sufficient capacity for learning non-linear relationships without excessive complexity.
-
 2. **Decreasing Layer Sizes (128→64→32):** Creates a funnel architecture that progressively abstracts features.
-
 3. **ReLU Activation:** Prevents vanishing gradient problem and enables faster training.
-
 4. **Batch Normalization:** Stabilizes training, allows higher learning rates, and acts as a regularizer.
-
 5. **Dropout:** Prevents overfitting by randomly dropping neurons during training.
-
 6. **Softmax Output:** Produces probability distribution over the four classes.
 
 ### 3.3 Training Configuration
 
 | Parameter | Value | Justification |
-|-----------|-------|---------------|
+| --- | --- | --- |
 | Loss Function | Categorical Cross-Entropy | Standard for multi-class classification |
 | Optimizer | Adam | Adaptive learning rate, robust performance |
 | Learning Rate | 0.001 | Standard starting point with reduction scheduling |
@@ -177,7 +169,7 @@ The model trained for approximately 40-60 epochs before early stopping triggered
 ### 4.2 Test Set Evaluation
 
 | Metric | Score |
-|--------|-------|
+| --- | --- |
 | Test Accuracy | ~65-70% |
 | Macro Precision | ~45-55% |
 | Macro Recall | ~45-55% |
@@ -187,7 +179,7 @@ The model trained for approximately 40-60 epochs before early stopping triggered
 ### 4.3 Per-Class Performance
 
 | Class | Precision | Recall | F1-Score | Support |
-|-------|-----------|--------|----------|---------|
+| --- | --- | --- | --- | --- |
 | Minor | High | High | High | ~5,700 |
 | PDO | Moderate | Moderate | Moderate | ~2,365 |
 | Serious | Low-Moderate | Low-Moderate | Low-Moderate | ~666 |
@@ -208,21 +200,15 @@ Key patterns observed:
 ### 5.1 Model Strengths
 
 1. **Robust Architecture:** The combination of batch normalization, dropout, and early stopping created a well-regularized model that generalizes reasonably well.
-
 2. **Class Handling:** Class weighting improved recognition of minority classes compared to an unweighted baseline.
-
 3. **Efficient Training:** The learning rate scheduling and early stopping ensured efficient use of computational resources.
-
 4. **Interpretability:** The structured approach allows for clear analysis of what the model learns at each layer.
 
 ### 5.2 Model Weaknesses
 
 1. **Class Imbalance Impact:** Despite class weighting, the severe imbalance (63% Minor vs 3% Fatal) limits minority class performance.
-
 2. **Feature Overlap:** Similar features between severity levels (e.g., Serious vs Fatal) make discrimination difficult.
-
 3. **Missing Data:** Substantial imputation was required, potentially introducing noise.
-
 4. **Limited Feature Engineering:** Domain-specific feature combinations could improve performance.
 
 ### 5.3 Error Analysis
@@ -294,7 +280,7 @@ The following visualizations support the analysis:
 After preprocessing, the following feature categories were included:
 - Time-related features
 - Driver demographics
-- Vehicle characteristics  
+- Vehicle characteristics
 - Road conditions
 - Environmental factors
 - Casualty counts
@@ -324,7 +310,7 @@ model = keras.Sequential([
 ### C. File Outputs
 
 | File | Description |
-|------|-------------|
+| --- | --- |
 | crash_analysis.py | Main implementation script |
 | crash_classification_model.keras | Saved trained model |
 | eda_*.png | Exploratory data analysis visualizations |
