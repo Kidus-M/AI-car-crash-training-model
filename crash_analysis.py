@@ -609,8 +609,30 @@ y_pred = np.argmax(y_pred_proba, axis=1)
 
 # [5.3] Classification metrics
 print("\n[5.3] Classification Report:")
-print("-" * 40)
+print("-" * 70)
 print(classification_report(y_test, y_pred, target_names=class_names))
+
+# Enhanced table format for classification report
+print("\n" + "=" * 70)
+print("DETAILED CLASSIFICATION METRICS")
+print("=" * 70)
+
+# Get the detailed classification report as a dictionary
+report_dict = classification_report(y_test, y_pred, target_names=class_names, output_dict=True)
+
+# Print header
+print(f"\n{'Class':<20} {'Precision':>12} {'Recall':>12} {'F1-Score':>12} {'Support':>12}")
+print("-" * 70)
+
+# Print per-class metrics
+for class_name in class_names:
+    precision = report_dict[class_name]['precision']
+    recall = report_dict[class_name]['recall']
+    f1 = report_dict[class_name]['f1-score']
+    support = int(report_dict[class_name]['support'])
+    print(f"{class_name:<20} {precision:>12.2f} {recall:>12.2f} {f1:>12.2f} {support:>12}")
+
+print("-" * 70)
 
 # Calculate individual metrics
 accuracy = accuracy_score(y_test, y_pred)
@@ -622,14 +644,16 @@ precision_weighted = precision_score(y_test, y_pred, average='weighted')
 recall_weighted = recall_score(y_test, y_pred, average='weighted')
 f1_weighted = f1_score(y_test, y_pred, average='weighted')
 
-print("\nSummary Metrics:")
-print(f"  Accuracy:           {accuracy:.4f}")
-print(f"  Macro Precision:    {precision_macro:.4f}")
-print(f"  Macro Recall:       {recall_macro:.4f}")
-print(f"  Macro F1-Score:     {f1_macro:.4f}")
-print(f"  Weighted Precision: {precision_weighted:.4f}")
-print(f"  Weighted Recall:    {recall_weighted:.4f}")
-print(f"  Weighted F1-Score:  {f1_weighted:.4f}")
+# Print summary metrics
+print(f"{'accuracy':<20} {'':<12} {'':<12} {accuracy:>12.2f} {len(y_test):>12}")
+print(f"{'macro avg':<20} {precision_macro:>12.2f} {recall_macro:>12.2f} {f1_macro:>12.2f} {len(y_test):>12}")
+print(f"{'weighted avg':<20} {precision_weighted:>12.2f} {recall_weighted:>12.2f} {f1_weighted:>12.2f} {len(y_test):>12}")
+print("=" * 70)
+
+print("\nKey Metrics Summary:")
+print(f"  Overall Accuracy:        {accuracy:.4f} ({accuracy*100:.2f}%)")
+print(f"  Macro-Average F1-Score:  {f1_macro:.4f}")
+print(f"  Weighted-Average F1:     {f1_weighted:.4f}")
 
 # [5.4] Confusion Matrix
 print("\n[5.4] Creating confusion matrix visualization...")
