@@ -30,6 +30,7 @@ from sklearn.metrics import (
     precision_score, recall_score, f1_score
 )
 from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, callbacks
@@ -211,13 +212,30 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(f"Training set: {X_train.shape[0]:,} samples ({X_train.shape[0]/len(X)*100:.1f}%)")
 print(f"Test set:     {X_test.shape[0]:,} samples ({X_test.shape[0]/len(X)*100:.1f}%)")
 
+# [2.12] Apply SMOTE to Training Data
+print("\n[2.12] Applying SMOTE to balance classes...")
+print("\nClass distribution BEFORE SMOTE:")
+for i, cls in enumerate(class_names):
+    count = (y_train == i).sum()
+    print(f"  {cls}: {count:,} ({count/len(y_train)*100:.1f}%)")
+
+smote = SMOTE(random_state=42)
+X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
+print("\nClass distribution AFTER SMOTE:")
+for i, cls in enumerate(class_names):
+    count = (y_train_resampled == i).sum()
+    print(f"  {cls}: {count:,} ({count/len(y_train_resampled)*100:.1f}%)")
+
+print(f"\nTraining samples increased: {len(y_train):,} → {len(y_train_resampled):,} ({len(y_train_resampled)/len(y_train):.1f}x)")
+
 # Convert to numpy arrays for Keras
-y_train = np.array(y_train)
+y_train_resampled = np.array(y_train_resampled)
 y_test = np.array(y_test)
 
 # One-hot encode targets
 num_classes = len(class_names)
-y_train_cat = keras.utils.to_categorical(y_train, num_classes)
+y_train_cat = keras.utils.to_categorical(y_train_resampled, num_classes)
 y_test_cat = keras.utils.to_categorical(y_test, num_classes)
 
 print(f"\nOne-hot encoded targets - shape: {y_train_cat.shape}")
@@ -229,7 +247,7 @@ print("\n" + "=" * 70)
 print("TASK 3: MODEL DESIGN")
 print("=" * 70)
 
-input_dim = X_train.shape[1]
+input_dim = X_train_resampled.shape[1]
 output_dim = num_classes
 
 print(f"\n[3.1] Neural Network Architecture:")
@@ -290,17 +308,9 @@ print("\n" + "=" * 70)
 print("TASK 4: TRAINING PROCESS")
 print("=" * 70)
 
-# Compute class weights
-print("\n[4.1] Computing class weights...")
-class_weights = compute_class_weight(
-    class_weight='balanced',
-    classes=np.unique(y_train),
-    y=y_train
-)
-class_weight_dict = {i: weight for i, weight in enumerate(class_weights)}
-print(f"Class weights:")
-for i, (cls, weight) in enumerate(zip(class_names, class_weights)):
-    print(f"  {cls}: {weight:.3f}")
+# Note: With SMOTE, we don't need class weights anymore since classes are balanced
+print("\n[4.1] Class weights not needed (SMOTE balanced the classes)")
+class_weight_dict = None
 
 # Compile model
 model.compile(
@@ -330,7 +340,7 @@ print("\n[4.2] Training the model...")
 print("-" * 40)
 
 history = model.fit(
-    X_train, y_train_cat,
+    X_train_resampled, y_train_cat,
     validation_split=0.15,
     epochs=100,
     batch_size=64,
