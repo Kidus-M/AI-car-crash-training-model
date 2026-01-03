@@ -8,18 +8,8 @@ accident severity using Ethiopian road crash data.
 Author: AI Senior Project
 Date: January 2026
 
-Tasks Covered:
-- Task 1: Data Loading & EDA
-- Task 2: Data Preprocessing
-- Task 3: Model Design
-- Task 4: Training Process
-- Task 5: Evaluation
-- Task 6: Interpretation & Reporting
 """
 
-# =============================================================================
-# IMPORTS
-# =============================================================================
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
