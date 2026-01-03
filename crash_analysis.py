@@ -748,13 +748,6 @@ Key Findings:
    - Difficulty distinguishing between 'Fatal' and 'Serious' accidents
    - 'PDO' class sometimes confused with 'Minor'
    - Limited feature engineering
-
-6. Recommendations:
-   - Collect more data for minority classes (Fatal, Serious)
-   - Consider SMOTE or other oversampling techniques
-   - Feature engineering: combine related features
-   - Try ensemble methods (Random Forest + Neural Network)
-   - Consider cost-sensitive learning for Fatal accidents
 """)
 
 # Save model
